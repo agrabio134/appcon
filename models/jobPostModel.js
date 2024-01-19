@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
 const jobPostSchema = new mongoose.Schema({
   title: {
@@ -12,20 +12,38 @@ const jobPostSchema = new mongoose.Schema({
   skillsRequired: [String],
   postedBy: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'User',
+    ref: "User",
     required: true,
+    default: null,
   },
   datePosted: {
     type: Date,
     default: Date.now,
   },
-  image: String, // URL or file path for the job post image
-  company: String, // Name of the hiring company
-  location: String, // Job location
-  salary: String, // Expected salary or salary range
-  contactEmail: String, // Contact email for applicants
-});
+  image: {
+    type: String,
+    required: true,
+  },
+  company: {
+    type: String,
+    required: true,
+  },
+  location: {
+    type: String,
+    required: true,
+  },
+  salary: {
+    type: String,
+    required: true,
+  },
+  contactEmail: {
+    type: String,
+    required: true,
+  },
+}, {timestamps: true}
 
-const JobPost = mongoose.model('JobPost', jobPostSchema);
+);
+
+const JobPost = mongoose.model("JobPost", jobPostSchema);
 
 module.exports = JobPost;

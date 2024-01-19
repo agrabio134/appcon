@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Simple UI</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+    form {
+      margin-bottom: 20px;
+      border: 1px solid #ccc;
+      padding: 15px;
+      border-radius: 5px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 20px;
+    }
+    th, td {
+      border: 1px solid #ddd;
+      padding: 8px;
+      text-align: left;
+    }
+    th {
+      background-color: #4CAF50;
+      color: white;
+    }
+    button {
+      background-color: #4CAF50;
+      color: white;
+      padding: 10px 15px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #45a049;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Simple UI for API</h1>
+
+  <form id="registerForm">
+    <h2>Create User (Register)</h2>
+    <label for="username">Username:</label>
+    <input type="text" id="username" required>
+    <label for="email">Email:</label>
+    <input type="email" id="email" required>
+    <label for="password">Password:</label>
+    <input type="password" id="password" required>
+    <button type="button" onclick="registerUser()">Register</button>
+  </form>
+
+  <form id="loginForm">
+    <h2>User Login</h2>
+    <label for="loginEmail">Email:</label>
+    <input type="email" id="loginEmail" required>
+    <label for="loginPassword">Password:</label>
+    <input type="password" id="loginPassword" required>
+    <button type="button" onclick="userLogin()">Login</button>
+  </form>
+
+  <form id="userDataForm">
+    <h2>Fetch User Data</h2>
+    <label for="userId">User ID:</label>
+    <input type="text" id="userId" required>
+    <button type="button" onclick="fetchUserData()">Fetch User Data</button>
+  </form>
+
+  <form id="completeCourseForm">
+    <h2>Complete Course</h2>
+    <label for="completeCourseUserId">User ID:</label>
+    <input type="text" id="completeCourseUserId" required>
+    <label for="completeCourseId">Course ID:</label>
+    <input type="text" id="completeCourseId" required>
+    <button type="button" onclick="completeCourse()">Complete Course</button>
+  </form>
+
+  <form id="createJobPostForm">
+    <h2>Create Job Post</h2>
+    <label for="jobPostTitle">Title:</label>
+    <input type="text" id="jobPostTitle" required>
+    <label for="jobPostDescription">Description:</label>
+    <textarea id="jobPostDescription" required></textarea>
+    <label for="jobPostSkills">Skills (comma-separated):</label>
+    <input type="text" id="jobPostSkills" required>
+    <label for="jobPostUserId">User ID:</label>
+    <input type="text" id="jobPostUserId" required>
+    <label for="jobPostImage">Image URL:</label>
+    <input type="text" id="jobPostImage">
+    <label for="jobPostCompany">Company:</label>
+    <input type="text" id="jobPostCompany">
+    <label for="jobPostLocation">Location:</label>
+    <input type="text" id="jobPostLocation">
+    <label for="jobPostSalary">Salary:</label>
+    <input type="text" id="jobPostSalary">
+    <label for="jobPostContactEmail">Contact Email:</label>
+    <input type="email" id="jobPostContactEmail">
+    <button type="button" onclick="createJobPost()">Create Job Post</button>
+  </form>
+
+  <h2>All Users</h2>
+  <table id="usersTable"></table>
+
+  <h2>All Job Posts</h2>
+  <table id="jobPostsTable"></table>
+
+  <h2>All Courses</h2>
+  <table id="coursesTable"></table>
+
+  <script>
+    const apiUrl = "http://localhost:3000/api";
+
+    async function fetchAllUsers() {
+      try {
+        const response = await fetch(`${apiUrl}/users`);
+        
+        if (response.ok) {
+          const data = await response.json();
+          displayTable("usersTable", data);
+        } else {
+          console.error("Error fetching all users:", response.statusText);
+        }
+      } catch (error) {
+        console.error("Error during fetch all users:", error.message);
+      }
+    }
+
+    async function fetchAllJobPosts() {
+      try {
+        const response = await fetch(`${apiUrl}/jobposts`);
+        
+        if (response.ok) {
+          const data = await response.json();
+          displayTable("jobPostsTable", data);
+        } else {
+          console.error("Error fetching all job posts:", response.statusText);
+        }
+      } catch (error) {
+        console.error("Error during fetch all job posts:", error.message);
+      }
+    }
+
+    async function fetchAllCourses() {
+      try {
+        const response = await fetch(`${apiUrl}/courses`);
+        
+        if (response.ok) {
+          const data = await response.json();
+          displayTable("coursesTable", data);
+        } else {
+          console.error("Error fetching all courses:", response.statusText);
+        }
+      } catch (error) {
+        console.error("Error during fetch all courses:", error.message);
+      }
+    }
+
+    function displayTable(tableId, data) {
+      const table = document.getElementById(tableId);
+      table.innerHTML = "";
+
+      if (data.length === 0) {
+        const row = table.insertRow();
+        const cell = row.insertCell(0);
+        cell.textContent = "No data available.";
+        return;
+      }
+
+      const headerRow = table.insertRow();
+      for (const key in data[0]) {
+        const headerCell = headerRow.insertCell();
+        headerCell.textContent = key;
+      }
+
+      data.forEach(item => {
+        const row = table.insertRow();
+        for (const key in item) {
+          const cell = row.insertCell();
+          cell.textContent = item[key];
+        }
+      });
+    }
+
+    window.onload = async () => {
+      await fetchAllUsers();
+      await fetchAllJobPosts();
+      await fetchAllCourses();
+    };
+  </script>
+
+
+</body>
+</html>

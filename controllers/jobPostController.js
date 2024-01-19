@@ -1,13 +1,25 @@
 const JobPost = require('../models/jobPostModel');
 
-exports.createJobPost = async (req, res) => {
-  // Handle job post creation logic, create a new job post in the database
-  try {
-    // Implement your job post creation logic here
-    // Example: const newJobPost = await JobPost.create(req.body);
-    res.status(201).json({ message: 'Job post created successfully' });
+
+const createJobPost = async (req, res) => {
+  try { 
+    const jobPost = await JobPost.create(req.body);
+    res.status(200).json({ jobPost });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Error creating job post' });
   }
 };
+
+const getAllJobPosts = async (req, res) => {
+  // Retrieve all courses from the database
+  try {
+    const jobPosts = await JobPost.find();
+    res.status(200).json(jobPosts);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Error fetching job posts' });
+  }
+}
+
+module.exports = { createJobPost, getAllJobPosts };

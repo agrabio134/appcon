@@ -1,8 +1,18 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const CourseController = require('../controllers/courseController');
+const {
+  completeCourse,
+  createCourse,
+  getAllCourses
+} = require("../controllers/courseController");
+
+// get all courses
+router.get("/", getAllCourses);
+
+// create course route
+router.post("/create", createCourse);
 
 // Complete course route
-router.post('/course/complete', CourseController.completeCourse);
+router.post("/complete", completeCourse);
 
 module.exports = router;
